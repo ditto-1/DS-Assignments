@@ -39,8 +39,7 @@ int* spiralOrder(const int** A, int n11, int n12, int *len1) {
 
 int main() {
     int arr[3][3] = {{1,2,3},{4,5,6},{7,8,9}};
-    
-    // Convert arr to "const int**"
+
     const int* A[3];
     for (int i = 0; i < 3; i++) {
         A[i] = arr[i];
