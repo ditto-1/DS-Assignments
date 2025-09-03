@@ -4,7 +4,7 @@
 #include <stack>
 using namespace std;
 
-vector<int> canSort(vector<int>& A){
+bool canSort(vector<int>& A){
     int N = A.size();
     vector<int> B;
     stack<int> s;
