@@ -8,6 +8,7 @@ int main(){
     cin >> col;
     cout << "Number of non-zero: ";
     cin >> nonzero;
+    
     int r[nonzero], c[nonzero], v[nonzero];
     for(int i=0; i<nonzero; i++){
         cout << "Enter row, col and value for element "<<i+1<<": ";
