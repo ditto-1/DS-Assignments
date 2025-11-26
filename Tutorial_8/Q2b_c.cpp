@@ -28,30 +28,23 @@ class tree{
             }else{
                 r->right = insert(r->right, value);
             }
-
             return r;
         }
 
-        void preorder(Node* r){
-            if (!r) return;
-            cout << r->data << " ";
-            preorder(r->left);
-            preorder(r->right);
+        Node* Minimum(Node* r){
+            while(r->left){
+                r = r->left;
+            }
+            return r;
         }
 
-        void inorder(Node* r){
-            if (!r) return;
-            preorder(r->left);
-            cout << r->data;
-            preorder(r->right);
+        Node* Maximum(Node *r){
+            while(r->right){
+                r = r->right;
+            }
+            return r;
         }
-
-        void postorder(Node* r){
-            if (!r) return;
-            preorder(r->left);
-            preorder(r->right);
-            cout << r->data;
-        }
+       
 };
 
 int main(){
@@ -60,16 +53,6 @@ int main(){
     for(int v : values){
         t.root = t.insert(t.root, v);
     }
-
-    cout << "Preorder: ";
-    t.postorder(t.root);
-    cout << endl;
-
-    cout << "Inorder: ";
-    t.inorder(t.root);
-    cout << endl;
-
-    cout << "Postorder: ";
-    t.postorder(t.root);
-    cout << endl;
+    cout << t.Maximum(t.root)->data<<endl;
+    cout << t.Minimum(t.root)->data;
 }

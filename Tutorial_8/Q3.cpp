@@ -1,87 +1,125 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
-    int data;
-    Node* left;
-    Node* right;
-
-    Node(int val) {
-        data = val;
-        left = right = nullptr;
-    }
+class Node{
+    public:
+        int data;
+        Node* left;
+        Node* right;
+        Node(int v){
+            data = v;
+            left = right = nullptr;
+        }
 };
 
-Node* insert(Node* root, int key) {
-    if (root == nullptr)
-        return new Node(key);
-
-    if (key < root->data)
-        root->left = insert(root->left, key);
-    else if (key > root->data)
-        root->right = insert(root->right, key);
-    else
-        cout << "Duplicate value " << key << " not allowed.\n";
-
-    return root;
-}
-
-Node* min(Node* root) {
-    while (root && root->left != nullptr)
-        root = root->left;
-    return root;
-}
-
-Node *del(Node* root, int key){
-    if (!root){
-        return root;
-    }
-
-    if (key < root->data){
-        root->left = del(root->left, key);
-    }else if (key > root->data){
-        root->right = del(root->right, key);
-    }else{
-        if (!root->left){
-            Node *temp = root->right;
-            delete root;
-            return temp;
-        }else if (!root->right){
-            Node *temp = root->left;
-            delete root;
-            return temp;
+class BST{
+    public:
+        Node* root;
+        BST(){
+            root = nullptr;
         }
 
-        Node *temp = min(root->right);
-        root->data = temp->data;
-        root->right = del(root->right, temp->data);
-    }
-    return root;
-}
+        bool search(int v){
+            Node *curr = root;
+            while(curr){
+                if (curr->data == v){
+                    return true;
+                }
 
-void inorder(Node* root) {
-    if (root != nullptr) {
-        inorder(root->left);
-        cout << root->data << " ";
-        inorder(root->right);
-    }
-}
+                if (v < curr->data){
+                    curr = curr->left;
+                }else{
+                    curr = curr->right;
+                }
+            }
+            return false;
+        }
+
+        Node* search_rec(Node* r, int v){
+            if(!r) return nullptr;
+            if (r->data == v){
+                return r;
+            }
+            if (v < r->data){
+                search_rec(r->left, v);
+            }else{
+                search_rec(r->right, v);
+            }
+            return r;
+        }
+
+        Node* insert(Node *r, int v){
+            if (!r) return new Node(v);
+            if(search(v)){
+                return nullptr;
+            }
+
+            if (v < r->data){
+                r->left = insert(r->left, v);
+            }else {
+                r->right = insert(r->right, v);
+            }
+
+            return r;
+        }
+
+        Node* Minimum(Node* r){
+            while(r->left){
+                r = r->left;
+            }
+            return r;
+        }
+
+        Node* del(Node *r, int v){
+            if (!r) return r;
+            if (v < r->data){
+                r->left = del(r->left, v);
+            }else if(v > r->data){
+                r->right = del(r->right, v);
+            }else{
+                if (!r->left){
+                    Node *temp = r->right;
+                    delete r;
+                    return temp;
+                }else if(!r->right){
+                    Node *temp = r->left;
+                    delete r;
+                    return temp;
+                }
+                Node *temp = Minimum(r->right);
+                r->data = temp->data;
+                r->right = del(r->right, temp->data);
+            }
+        }
+
+        int MaxDepth(Node* r){
+            if (!r) return 0;
+
+            int leftDepth = MaxDepth(r->left);
+            int rightDepth = MaxDepth(r->right);
+
+            return 1+max(leftDepth, rightDepth);
+        }
+
+        int MinDepth(Node *r){
+            if (!r) return 0;
+            
+            if(!r->left && !r->right){
+                return 1;
+            }
+
+            if(!r->left){
+                return 1+MinDepth(r->right);
+            }
+
+            if(!r->right){
+                return 1+MinDepth(r->left);
+            }
+
+            return 1+min(MinDepth(r->left), MinDepth(r->right));
+        }
+};
 
 int main(){
-    Node* root = nullptr;
 
-    int elements[] = {20, 10, 30, 5, 15, 25, 35};
-    for (int val : elements)
-        root = insert(root, val);
-
-    cout << "In-order traversal of BST: ";
-    inorder(root);
-    cout << endl;
-
-    cout << "\nDeleting node 10...\n";
-    root = del(root, 10);
-
-    cout << "In-order traversal after deletion: ";
-    inorder(root);
-    cout << endl;
 }

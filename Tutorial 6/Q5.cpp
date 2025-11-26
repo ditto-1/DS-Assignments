@@ -1,62 +1,69 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
+class Node {
+public:
     int data;
     Node* next;
+    Node(int val) {
+        data = val;
+        next = nullptr;
+    }
 };
 
-
-void insert(Node*& head, int value) {
-    Node* newNode = new Node{value, nullptr};
-    if (!head) {
-        head = newNode;
-        return;
+class LinkedList {
+    Node* head;
+public:
+    LinkedList() {
+        head = nullptr;
     }
-    Node* temp = head;
-    while (temp->next)
-        temp = temp->next;
-    temp->next = newNode;
-}
 
-void makeCircular(Node* head) {
-    if (!head) return;
-    Node* temp = head;
-    while (temp->next)
-        temp = temp->next;
-    temp->next = head;  
-}
+    void insert(int val) {
+        Node* newnode = new Node(val);
+        if (!head) {
+            head = newnode;
+            return;
+        }
+        Node* temp = head;
+        while (temp->next) {
+            temp = temp->next;
+        }
+        temp->next = newnode;
+    }
 
-bool isCircular(Node* head) {
-    if (head == nullptr)
-        return false;
+    void makeCircular() {
+        if (!head) return;
+        Node* temp = head;
+        while (temp->next) {
+            temp = temp->next;
+        }
+        temp->next = head;
+    }
 
-    Node* temp = head->next;
-    while (temp != nullptr && temp != head)
-        temp = temp->next;
+    bool isCircular() {
+        if (!head) return false;
 
-    return (temp == head);
-}
+        Node* temp = head->next;
+
+        while (temp != nullptr && temp != head) {
+            temp = temp->next;
+        }
+
+        return (temp == head);
+    }
+};
 
 int main() {
-    Node* head = nullptr;
+    LinkedList L;
+    L.insert(10);
+    L.insert(20);
+    L.insert(30);
 
-     insert(head, 10);
-    insert(head, 20);
-    insert(head, 30);
-
-    cout << "Initially checking normal linked list:\n";
-    if (isCircular(head))
-        cout << "The linked list is circular.\n";
+    if (L.isCircular())
+        cout << "Circular Linked List" << endl;
     else
-        cout << "The linked list is NOT circular.\n";
+        cout << "Not a Circular Linked List" << endl;
 
-
-    makeCircular(head);
-    cout << "\nAfter making it circular:\n";
-    if (isCircular(head))
-        cout << "The linked list is circular.\n";
-    else
-        cout << "The linked list is NOT circular.\n";
+    return 0;
 }
 
